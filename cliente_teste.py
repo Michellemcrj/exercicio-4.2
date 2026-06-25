@@ -1,27 +1,9 @@
 import asyncio
 import json
 import sys
-import threading
-import time
 
-import httpx
-import uvicorn
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-
-
-def _start_api():
-    config = uvicorn.Config("app.main:app", port=8000, log_level="error")
-    server = uvicorn.Server(config)
-    t = threading.Thread(target=server.run, daemon=True)
-    t.start()
-    for _ in range(20):
-        try:
-            httpx.get("http://localhost:8000/health", timeout=1)
-            return
-        except Exception:
-            time.sleep(0.5)
-    raise RuntimeError("API nao subiu em 10s")
 
 
 async def main() -> dict:
@@ -44,5 +26,4 @@ async def main() -> dict:
 
 
 if __name__ == "__main__":
-    _start_api()
     print(json.dumps(asyncio.run(main())))
