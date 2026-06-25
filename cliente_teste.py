@@ -1,5 +1,6 @@
 import asyncio
 import json
+import sys
 import threading
 import time
 
@@ -24,7 +25,7 @@ def _start_api():
 
 
 async def main() -> dict:
-    params = StdioServerParameters(command="python", args=["servidor_mcp.py"])
+    params = StdioServerParameters(command=sys.executable, args=["servidor_mcp.py"])
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
